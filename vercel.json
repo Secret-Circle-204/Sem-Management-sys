@@ -6,12 +6,8 @@
       "use": "@vercel/node"
     },
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist",
-        "maxLambdaSize": "10mb"
-      }
+      "src": "dist/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -20,27 +16,11 @@
       "dest": "server/index.js"
     },
     {
-      "src": "^/assets/(.*)\\.js$",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable",
-        "content-type": "application/javascript"
-      },
-      "dest": "/assets/$1.js"
-    },
-    {
-      "src": "^/assets/(.*)\\.css$",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable",
-        "content-type": "text/css"
-      },
-      "dest": "/assets/$1.css"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "dist/$1"
     }
-  ]
+  ],
+  "env": {
+    "VERCEL": "1"
+  }
 }

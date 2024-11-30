@@ -14,10 +14,16 @@ export const initializeDatabase = async () => {
   }
 
   try {
+    // استخدام قاعدة بيانات في الذاكرة في بيئة Vercel
+    const isVercel = process.env.VERCEL === '1';
+    const dbPath = isVercel ? ':memory:' : join(__dirname, '../../database.sqlite');
+
     db = await open({
-      filename: join(__dirname, '../../database.sqlite'),
+      filename: dbPath,
       driver: sqlite3.Database
     });
+
+    console.log('Database initialized successfully at:', dbPath);
 
     // إنشاء الجداول
     await db.exec(`
@@ -48,6 +54,19 @@ export const initializeDatabase = async () => {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    // إضافة بيانات أولية في بيئة Vercel
+    if (isVercel) {
+      // التحقق من وجود الموظفين
+      const employees = await db.all('SELECT * FROM employees');
+      if (employees.length === 0) {
+        // إضافة موظف افتراضي
+        await db.run(`
+          INSERT INTO employees (name, email, password, role, department, gender)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `, ['Admin User', 'admin@example.com', '$2b$10$YourHashedPasswordHere', 'admin', 'Management', 'male']);
+      }
+    }
 
     await db.exec(`
       CREATE TABLE IF NOT EXISTS tasks (
@@ -83,7 +102,6 @@ export const initializeDatabase = async () => {
       )
     `);
 
-    console.log('Database initialized successfully');
     return db;
   } catch (error) {
     console.error('Database initialization error:', error);
