@@ -93,7 +93,7 @@ const TaskManagement = () => {
   const fetchEmployees = async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await axios.get('http://localhost:5000/api/employees', {
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/employees`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -107,7 +107,7 @@ const TaskManagement = () => {
   const fetchTasks = async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await axios.get('http://localhost:5000/api/schedule', {
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/schedule`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -127,7 +127,7 @@ const TaskManagement = () => {
   const handleTaskAdd = async (taskData) => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch('http://localhost:5000/api/schedule', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/schedule`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${user.token}`,
@@ -151,7 +151,7 @@ const TaskManagement = () => {
   const handleUpdateTask = async (taskId, taskData) => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      await axios.put(`http://localhost:5000/api/schedule/${taskId}`, taskData, {
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/schedule/${taskId}`, taskData, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -168,7 +168,7 @@ const TaskManagement = () => {
     if (window.confirm('Are you sure you want to delete this task?')) {
       try {
         const user = JSON.parse(localStorage.getItem('user'));
-        await axios.delete(`http://localhost:5000/api/schedule/${taskId}`, {
+        await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/schedule/${taskId}`, {
           headers: {
             'Authorization': `Bearer ${user.token}`
           }
