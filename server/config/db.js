@@ -2,6 +2,7 @@ import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import bcrypt from 'bcryptjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -57,14 +58,23 @@ export const initializeDatabase = async () => {
 
     // إضافة بيانات أولية في بيئة Vercel
     if (isVercel) {
-      // التحقق من وجود الموظفين
-      const employees = await db.all('SELECT * FROM employees');
-      if (employees.length === 0) {
-        // إضافة موظف افتراضي
-        await db.run(`
-          INSERT INTO employees (name, email, password, role, department, gender)
-          VALUES (?, ?, ?, ?, ?, ?)
-        `, ['Admin User', 'admin@example.com', '$2b$10$YourHashedPasswordHere', 'admin', 'Management', 'male']);
+      try {
+        // التحقق من وجود الموظفين
+        const employees = await db.all('SELECT * FROM employees');
+        if (employees.length === 0) {
+          // إنشاء كلمة مرور مشفرة
+          const hashedPassword = await bcrypt.hash('admin123', 10);
+          
+          // إضافة موظف افتراضي
+          await db.run(`
+            INSERT INTO employees (name, email, password, role, department, gender)
+            VALUES (?, ?, ?, ?, ?, ?)
+          `, ['Admin User', 'admin@example.com', hashedPassword, 'admin', 'Management', 'male']);
+          
+          console.log('Default admin user created successfully');
+        }
+      } catch (error) {
+        console.error('Error creating default admin:', error);
       }
     }
 
