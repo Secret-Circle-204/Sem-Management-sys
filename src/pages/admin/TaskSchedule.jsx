@@ -65,7 +65,7 @@ const TaskSchedule = () => {
   const fetchScheduledTasks = async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch('http://localhost:5000/api/schedule', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/schedule`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -105,7 +105,7 @@ const TaskSchedule = () => {
   const fetchEmployees = async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch('http://localhost:5000/api/employees', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/employees`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -137,7 +137,7 @@ const TaskSchedule = () => {
   const handleTaskDelete = async (taskId) => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch(`http://localhost:5000/api/schedule/${taskId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/schedule/${taskId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`
@@ -169,7 +169,7 @@ const TaskSchedule = () => {
     try {
       console.log('Adding new task:', taskData);
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch('http://localhost:5000/api/schedule', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/schedule`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${user.token}`,
@@ -224,7 +224,7 @@ const TaskSchedule = () => {
   const handleTaskUpdate = async (taskId, taskData) => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch(`http://localhost:5000/api/schedule/${taskId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/schedule/${taskId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${user.token}`,

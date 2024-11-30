@@ -38,7 +38,7 @@ const EmployeeTable = () => {
         search: filters?.search.trim()
       }).toString();
 
-      const response = await fetch(`http://localhost:5000/api/employees?${queryParams}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/employees?${queryParams}`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
@@ -102,7 +102,7 @@ const EmployeeTable = () => {
 
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch(`http://localhost:5000/api/employees/${employee?.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/employees/${employee?.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`
@@ -124,7 +124,7 @@ const EmployeeTable = () => {
     try {
       // تحقق من وجود المهام قبل فتح النافذة المنبثقة
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch(`http://localhost:5000/api/tasks/employee/${employee?.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/tasks/employee/${employee?.id}`, {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
